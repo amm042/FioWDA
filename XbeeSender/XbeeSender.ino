@@ -134,10 +134,14 @@ void readAdc(){
 }
 
 
+volatile unsigned long last = 0;
 // the loop function runs over and over again forever
 void loop() {
 
-  delay(1000);
+  last += 100;
+  while (millis() < last)
+    delay(0);
+  last = millis();
   readAdc();
   Serial.print(msg.ticks);
   Serial.print(": ");

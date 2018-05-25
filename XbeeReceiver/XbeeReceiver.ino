@@ -69,9 +69,33 @@ void readPacket()
         Serial.print(msg->ticks);
         Serial.print(": ");
         for (int i=0; i<NUM_ADC;i++){
+          double val;
+
+          switch (i){
+            case 0:
+            case 1:
+            case 2:
+              // using 0.10 ohm load resistor
+              // V = I * R
+              // I = V / R
+              val = 10.0 * 2.56 * msg->adc_counts[i] / 1024.0;
+              Serial.print(val, 3);
+              Serial.print(" A ");
+              break;
+
+            case 3:
+            case 4:
+            case 5:
+              val = 320.0/28160.0 * msg->adc_counts[i];
+              Serial.print(val, 3);
+              Serial.print(" V ");
+              break;
+          }
           
-          Serial.print(msg->adc_counts[i]);
-          Serial.print(" ");
+          //Serial.print(msg->adc_counts[i]);
+          if (i < 5){
+            Serial.print(", ");
+          }
         }
         Serial.println();
 //      RXLED0;
